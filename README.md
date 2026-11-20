@@ -1,76 +1,76 @@
 # Roamind
 
-**Um chat de IA pessoal com liberdade de escolha.** O Roamind é um app para iPhone no estilo ChatGPT em que você conversa com modelos de IA abertos, escolhe qual modelo usar e mantém suas conversas sob seu controle.
+**A personal AI chat with freedom of choice.** Roamind is a ChatGPT-style iPhone app where you chat with open-source models, choose which model to use, and keep your conversations under your control.
 
-> 🚧 Em construção. Veja [Estado atual](#estado-atual).
+> 🚧 Under construction. See [Current status](#current-status).
 
-## Por que o Roamind
+## Why Roamind
 
-- **Liberdade de modelo:** em vez de ficar preso a um modelo e às regras dele, você usa modelos abertos e pode trocar entre eles.
-- **Suas conversas, seus dados:** o histórico fica no seu backend e no seu banco, não na plataforma de outra empresa.
-- **Experiência de chat de verdade:** respostas em tempo real, histórico organizado e controle sobre o comportamento do assistente.
+- **Model freedom:** instead of being locked into one model and its rules, you use open models and can switch between them.
+- **Your conversations, your data:** your history lives on your own backend and database, not on another company's platform.
+- **A real chat experience:** real-time responses, organized history, and control over how the assistant behaves.
 
-## Funcionalidades
+## Features
 
-### Primeira versão
-- Login com email e senha
-- Respostas em streaming, aparecendo palavra por palavra
-- Histórico de conversas: listar, abrir e apagar
-- Prompt de sistema para ajustar o tom e a personalidade do assistente
-- Parar a resposta, regenerar a última e copiar o texto
-- Um modelo, configurado no backend
+### First version
+- Email and password login
+- Streaming responses, appearing word by word
+- Conversation history: list, open, and delete
+- System prompt to adjust the assistant's tone and personality
+- Stop a response, regenerate the last one, and copy the text
+- A single model, configured on the backend
 
-### Próximos passos
-- Escolha do modelo no app, a partir de uma lista curta de modelos selecionados
-- Memória entre conversas
-- Voz: falar e ouvir as respostas
-- Anexos de imagens e arquivos
-- Recuperação de senha
-- Criptografia do conteúdo das mensagens
-- Versão web
+### Next steps
+- Model selection in the app, from a short list of curated models
+- Memory across conversations
+- Voice: speak and listen to responses
+- Image and file attachments
+- Password recovery
+- Message content encryption
+- Web version
 
-## Arquitetura (Em revisão)
+## Architecture (Under review)
 
-O app nunca fala direto com o provedor de IA. Toda conversa passa pela API, que autentica o usuário, salva as mensagens e repassa a resposta do modelo em streaming.
+The app never talks directly to the AI provider. Every conversation goes through the API, which authenticates the user, stores the messages, and streams the model's response back.
 
 ```mermaid
 flowchart LR
-  A[App iOS<br/>React Native + Expo] -->|HTTPS + SSE| B[API<br/>NestJS]
+  A[iOS App<br/>React Native + Expo] -->|HTTPS + SSE| B[API<br/>NestJS]
   B --> C[(Postgres<br/>Neon)]
-  B -->|API compatível com OpenAI| D[DeepSeek open source<br/>na cloud]
+  B -->|OpenAI-compatible API| D[Open source DeepSeek<br/>in the cloud]
 ```
 
-| Camada | Tecnologia |
+| Layer | Technology |
 | --- | --- |
-| App | React Native com Expo e Expo Router |
-| API | NestJS, com streaming via SSE |
-| Autenticação | JWT (access e refresh token) e senhas com argon2 |
-| Banco | Postgres no Neon, com Drizzle |
-| Hospedagem da API | Render |
-| Modelo | DeepSeek open source, hospedado na cloud |
-| Monorepo | pnpm workspaces e Turborepo |
+| App | React Native with Expo and Expo Router |
+| API | NestJS, with SSE streaming |
+| Authentication | JWT (access and refresh tokens) and argon2 password hashing |
+| Database | Postgres on Neon, with Drizzle |
+| API hosting | Render |
+| Model | Open-source DeepSeek, hosted in the cloud |
+| Monorepo | pnpm workspaces and Turborepo |
 
-### Estrutura
+### Structure
 
 ```
 apps/
-  backend/      # API em NestJS
-  mobile/       # App em Expo
+  backend/      # NestJS API
+  mobile/       # Expo app
 packages/
-  shared/       # tipos e schemas compartilhados
-  api-client/   # cliente da API usado pelo app
+  shared/       # shared types and schemas
+  api-client/   # API client used by the app
 ```
 
-### Modelos
+### Models
 
-- Modelo inicial: DeepSeek open source, rodando na cloud e acessado por uma API compatível com a da OpenAI
-- A chave da API fica só no backend, nunca no app
-- O backend usa uma interface de provedor, então dá para trocar de modelo ou de provedor sem mexer no resto do sistema
+- Initial model: open-source DeepSeek, running in the cloud and accessed through an OpenAI-compatible API
+- The API key lives only on the backend, never in the app
+- The backend uses a provider interface, so the model or provider can be swapped without touching the rest of the system
 
-## Estado atual
+## Current status
 
-Em construção, ainda não roda. Nesta fase, trocar de modelo significa mudar uma variável de ambiente no backend e fazer deploy.
+Under construction, not runnable yet. At this stage, switching models means changing an environment variable on the backend and redeploying.
 
-## Como rodar
+## Getting started
 
-O passo a passo entra aqui quando o backend estiver de pé. Até a distribuição pelo TestFlight, o app abre pelo Expo Go.
+Setup steps will be added here once the backend is up. Until it's distributed through TestFlight, the app runs on Expo Go.
