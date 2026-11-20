@@ -29,7 +29,7 @@
 - Criptografia do conteúdo das mensagens
 - Versão web
 
-## Arquitetura
+## Arquitetura (Em revisão)
 
 O app nunca fala direto com o provedor de IA. Toda conversa passa pela API, que autentica o usuário, salva as mensagens e repassa a resposta do modelo em streaming.
 
