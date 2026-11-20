@@ -1,6 +1,6 @@
 # Roamind
 
-**Um chat de IA pessoal com liberdade de escolha.** O Roamind é um app para iPhone no estilo ChatGPT em que você conversa com modelos de IA abertos, escolhe qual modelo usar e mantém suas conversas sob seu controle, no seu próprio backend.
+**Um chat de IA pessoal com liberdade de escolha.** O Roamind é um app para iPhone no estilo ChatGPT em que você conversa com modelos de IA abertos, escolhe qual modelo usar e mantém suas conversas sob seu controle.
 
 O nome vem de *roam* + *mind*: uma mente livre para explorar, perguntar e escolher.
 
