@@ -1,0 +1,6 @@
+dist/
+build/
+coverage/
+.turbo/
+.expo/
+pnpm-lock.yaml
