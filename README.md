@@ -13,6 +13,7 @@
 ## Features
 
 ### First version
+
 - Email and password login
 - Streaming responses, appearing word by word
 - Conversation history: list, open, and delete
@@ -21,6 +22,7 @@
 - A single model, configured on the backend
 
 ### Next steps
+
 - Model selection in the app, from a short list of curated models
 - Memory across conversations
 - Voice: speak and listen to responses
@@ -40,15 +42,15 @@ flowchart LR
   B -->|OpenAI-compatible API| D[Open source DeepSeek<br/>in the cloud]
 ```
 
-| Layer | Technology |
-| --- | --- |
-| App | React Native with Expo and Expo Router |
-| API | NestJS, with SSE streaming |
+| Layer          | Technology                                                  |
+| -------------- | ----------------------------------------------------------- |
+| App            | React Native with Expo and Expo Router                      |
+| API            | NestJS, with SSE streaming                                  |
 | Authentication | JWT (access and refresh tokens) and argon2 password hashing |
-| Database | Postgres on Neon, with Drizzle |
-| API hosting | Render |
-| Model | Open-source DeepSeek, hosted in the cloud |
-| Monorepo | pnpm workspaces and Turborepo |
+| Database       | Postgres on Neon, with Drizzle                              |
+| API hosting    | Render                                                      |
+| Model          | Open-source DeepSeek, hosted in the cloud                   |
+| Monorepo       | pnpm workspaces and Turborepo                               |
 
 ### Structure
 
