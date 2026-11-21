@@ -10,8 +10,10 @@
       "persistent": true
     },
     "lint": {
-      "dependsOn": ["^build"]
+      "dependsOn": ["^build"],
+      "inputs": ["$TURBO_DEFAULT$", "$TURBO_ROOT$/eslint.config.mjs"]
     },
+    "//#lint:root": {},
     "test": {
       "dependsOn": ["^build"]
     },
