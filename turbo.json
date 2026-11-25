@@ -1,5 +1,6 @@
 {
   "$schema": "https://turborepo.com/schema.json",
+  "globalPassThroughEnv": ["PORT", "NEON_CONNECTION_STRING"],
   "tasks": {
     "build": {
       "dependsOn": ["^build"],
