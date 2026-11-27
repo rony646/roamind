@@ -1,6 +1,6 @@
 {
   "$schema": "https://turborepo.com/schema.json",
-  "globalPassThroughEnv": ["PORT", "NEON_CONNECTION_STRING"],
+  "globalPassThroughEnv": ["PORT", "NEON_CONNECTION_STRING", "JWT_SECRET"],
   "tasks": {
     "build": {
       "dependsOn": ["^build"],
@@ -8,7 +8,8 @@
     },
     "dev": {
       "cache": false,
-      "persistent": true
+      "persistent": true,
+      "dependsOn": ["^build"]
     },
     "lint": {
       "dependsOn": ["^build"],
