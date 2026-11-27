@@ -9,6 +9,8 @@ const ALLOW_SIGNUP_REQUIRED_MESSAGE = 'ALLOW_SIGNUP is required';
 const ALLOW_SIGNUP_INVALID_MESSAGE = 'ALLOW_SIGNUP must be true or false';
 const ALLOW_SIGNUP_TRUE = 'true';
 const ALLOW_SIGNUP_FALSE = 'false';
+const OPEN_UNCENSORED_API_KEY_REQUIRED_MESSAGE = 'OPEN_UNCENSORED_API_KEY is required';
+const OPEN_UNCENSORED_MODEL_REQUIRED_MESSAGE = 'OPEN_UNCENSORED_MODEL is required';
 
 export const envSchema = z.object({
   PORT: z
@@ -34,6 +36,18 @@ export const envSchema = z.object({
         issue.input === undefined ? ALLOW_SIGNUP_REQUIRED_MESSAGE : ALLOW_SIGNUP_INVALID_MESSAGE,
     })
     .transform((value) => value === ALLOW_SIGNUP_TRUE),
+  OPEN_UNCENSORED_API_KEY: z
+    .string({
+      error: (issue) =>
+        issue.input === undefined ? OPEN_UNCENSORED_API_KEY_REQUIRED_MESSAGE : undefined,
+    })
+    .min(1, { error: OPEN_UNCENSORED_API_KEY_REQUIRED_MESSAGE }),
+  OPEN_UNCENSORED_MODEL: z
+    .string({
+      error: (issue) =>
+        issue.input === undefined ? OPEN_UNCENSORED_MODEL_REQUIRED_MESSAGE : undefined,
+    })
+    .min(1, { error: OPEN_UNCENSORED_MODEL_REQUIRED_MESSAGE }),
 });
 
 export type Env = z.infer<typeof envSchema>;
