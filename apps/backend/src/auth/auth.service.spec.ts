@@ -1,14 +1,17 @@
 import { createHash } from 'node:crypto';
-import { ConflictException, UnauthorizedException } from '@nestjs/common';
+import { ConflictException, ForbiddenException, UnauthorizedException } from '@nestjs/common';
+import type { ConfigService } from '@nestjs/config';
 import { JwtService } from '@nestjs/jwt';
 import { hash, verify } from 'argon2';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
+import type { Env } from '../config/env.js';
 import type { DatabaseService } from '../database/database.service.js';
 import type { UsersService } from '../users/users.service.js';
 import {
   EMAIL_ALREADY_REGISTERED_MESSAGE,
   INVALID_CREDENTIALS_MESSAGE,
   INVALID_REFRESH_TOKEN_MESSAGE,
+  SIGNUP_CLOSED_MESSAGE,
   REFRESH_TOKEN_HASH_ALGORITHM,
   REFRESH_TOKEN_TTL_MS,
   UNIQUE_VIOLATION_CODE,
@@ -56,13 +59,15 @@ function createService() {
   });
   const remove = vi.fn().mockReturnValue({ where });
   const signAsync = vi.fn().mockResolvedValue(ACCESS_TOKEN);
+  const get = vi.fn().mockReturnValue(true);
   const service = new AuthService(
     { findByEmail, create } as unknown as UsersService,
     { client: { insert, delete: remove } } as unknown as DatabaseService,
     { signAsync } as unknown as JwtService,
+    { get } as unknown as ConfigService<Env, true>,
   );
 
-  return { service, findByEmail, create, values, signAsync, returning, remove };
+  return { service, findByEmail, create, values, signAsync, returning, remove, get };
 }
 
 function storedToken(values: ReturnType<typeof vi.fn>): StoredRefreshToken {
@@ -107,6 +112,17 @@ describe('AuthService', () => {
       createHash(REFRESH_TOKEN_HASH_ALGORITHM).update(result.refreshToken).digest('hex'),
     );
     expect(stored.tokenHash).not.toBe(result.refreshToken);
+  });
+
+  it('rejects registration when signup is closed', async () => {
+    const { service, get, create } = createService();
+    get.mockReturnValue(false);
+
+    await expect(
+      service.register({ name: NAME, email: EMAIL, password: PASSWORD }),
+    ).rejects.toThrow(new ForbiddenException(SIGNUP_CLOSED_MESSAGE));
+    expect(create).not.toHaveBeenCalled();
+    expect(hash).not.toHaveBeenCalled();
   });
 
   it('rejects a duplicate email', async () => {

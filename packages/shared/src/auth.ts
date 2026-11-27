@@ -30,7 +30,13 @@ export const refreshTokenBodySchema = z.object({
   refreshToken: z.string().min(1, { error: REFRESH_TOKEN_REQUIRED_MESSAGE }),
 });
 
+export const currentUserSchema = z.object({
+  id: z.uuid(),
+  email: emailSchema,
+});
+
 export type RegisterBody = z.infer<typeof registerBodySchema>;
 export type LoginBody = z.infer<typeof loginBodySchema>;
 export type AuthTokens = z.infer<typeof authTokensSchema>;
 export type RefreshTokenBody = z.infer<typeof refreshTokenBodySchema>;
+export type CurrentUser = z.infer<typeof currentUserSchema>;

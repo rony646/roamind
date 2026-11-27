@@ -1,4 +1,5 @@
 import { Injectable } from '@nestjs/common';
+import type { CurrentUser } from '@roamind/shared';
 import { eq } from 'drizzle-orm';
 import { DatabaseService } from '../database/database.service.js';
 import { users } from '../database/schema/index.js';
@@ -37,9 +38,24 @@ const createdUserColumns = {
   email: users.email,
 };
 
+const currentUserColumns = {
+  id: users.id,
+  email: users.email,
+};
+
 @Injectable()
 export class UsersService {
   constructor(private readonly database: DatabaseService) {}
+
+  async findById(id: string): Promise<CurrentUser | undefined> {
+    const [user] = await this.database.client
+      .select(currentUserColumns)
+      .from(users)
+      .where(eq(users.id, id))
+      .limit(1);
+
+    return user;
+  }
 
   async findByEmail(email: string): Promise<UserRecord | undefined> {
     const [user] = await this.database.client
