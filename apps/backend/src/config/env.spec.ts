@@ -11,6 +11,10 @@ const CONNECTION_STRING = 'postgres://localhost/roamind';
 const JWT_SECRET = 'test-secret';
 const ALLOW_SIGNUP_ENABLED = 'true';
 const ALLOW_SIGNUP_DISABLED = 'false';
+const OPEN_UNCENSORED_API_KEY = 'test-key';
+const OPEN_UNCENSORED_MODEL = 'test-model';
+const OPEN_UNCENSORED_API_KEY_REQUIRED_MESSAGE = 'OPEN_UNCENSORED_API_KEY is required';
+const OPEN_UNCENSORED_MODEL_REQUIRED_MESSAGE = 'OPEN_UNCENSORED_MODEL is required';
 
 describe('envSchema', () => {
   it('rejects a missing PORT', () => {
@@ -79,12 +83,43 @@ describe('envSchema', () => {
     }
   });
 
+  it('rejects a missing OPEN_UNCENSORED_API_KEY', () => {
+    const result = envSchema.safeParse({
+      PORT: '8080',
+      NEON_CONNECTION_STRING: CONNECTION_STRING,
+      JWT_SECRET,
+      ALLOW_SIGNUP: ALLOW_SIGNUP_ENABLED,
+    });
+
+    expect(result.success).toBe(false);
+    if (!result.success) {
+      expect(result.error.issues[0]?.message).toBe(OPEN_UNCENSORED_API_KEY_REQUIRED_MESSAGE);
+    }
+  });
+
+  it('rejects a missing OPEN_UNCENSORED_MODEL', () => {
+    const result = envSchema.safeParse({
+      PORT: '8080',
+      NEON_CONNECTION_STRING: CONNECTION_STRING,
+      JWT_SECRET,
+      ALLOW_SIGNUP: ALLOW_SIGNUP_ENABLED,
+      OPEN_UNCENSORED_API_KEY,
+    });
+
+    expect(result.success).toBe(false);
+    if (!result.success) {
+      expect(result.error.issues[0]?.message).toBe(OPEN_UNCENSORED_MODEL_REQUIRED_MESSAGE);
+    }
+  });
+
   it('parses ALLOW_SIGNUP into a boolean', () => {
     const result = envSchema.safeParse({
       PORT: '8080',
       NEON_CONNECTION_STRING: CONNECTION_STRING,
       JWT_SECRET,
       ALLOW_SIGNUP: ALLOW_SIGNUP_DISABLED,
+      OPEN_UNCENSORED_API_KEY,
+      OPEN_UNCENSORED_MODEL,
     });
 
     expect(result.success).toBe(true);
@@ -100,6 +135,8 @@ describe('envSchema', () => {
       NEON_CONNECTION_STRING: CONNECTION_STRING,
       JWT_SECRET,
       ALLOW_SIGNUP: ALLOW_SIGNUP_ENABLED,
+      OPEN_UNCENSORED_API_KEY,
+      OPEN_UNCENSORED_MODEL,
     });
 
     expect(result.success).toBe(true);

@@ -4,6 +4,7 @@ import { AuthModule } from './auth/auth.module.js';
 import { envSchema } from './config/env.js';
 import { DatabaseModule } from './database/database.module.js';
 import { HealthController } from './health/health.controller.js';
+import { LlmModule } from './llm/llm.module.js';
 
 @Module({
   imports: [
@@ -13,6 +14,7 @@ import { HealthController } from './health/health.controller.js';
     }),
     DatabaseModule,
     AuthModule,
+    LlmModule,
   ],
   controllers: [HealthController],
 })
