@@ -1,5 +1,5 @@
 import { BadRequestException } from '@nestjs/common';
-import { loginBodySchema, registerBodySchema } from '@roamind/shared';
+import { loginBodySchema, refreshTokenBodySchema, registerBodySchema } from '@roamind/shared';
 import { describe, expect, it } from 'vitest';
 import { ZodValidationPipe } from './zod-validation.pipe.js';
 
@@ -31,5 +31,11 @@ describe('ZodValidationPipe', () => {
     const pipe = new ZodValidationPipe(loginBodySchema);
 
     expect(() => pipe.transform({})).toThrow(BadRequestException);
+  });
+
+  it('rejects an empty refresh token', () => {
+    const pipe = new ZodValidationPipe(refreshTokenBodySchema);
+
+    expect(() => pipe.transform({ refreshToken: '' })).toThrow(BadRequestException);
   });
 });

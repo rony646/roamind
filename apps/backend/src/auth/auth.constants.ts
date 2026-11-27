@@ -20,4 +20,5 @@ export const REFRESH_TOKEN_HASH_ALGORITHM = 'sha256';
 
 export const EMAIL_ALREADY_REGISTERED_MESSAGE = 'Email is already registered';
 export const INVALID_CREDENTIALS_MESSAGE = 'Invalid email or password';
+export const INVALID_REFRESH_TOKEN_MESSAGE = 'Invalid refresh token';
 export const UNIQUE_VIOLATION_CODE = '23505';
