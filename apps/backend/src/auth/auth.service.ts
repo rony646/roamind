@@ -1,9 +1,16 @@
 import { createHash, randomBytes } from 'node:crypto';
-import { ConflictException, Injectable, UnauthorizedException } from '@nestjs/common';
+import {
+  ConflictException,
+  ForbiddenException,
+  Injectable,
+  UnauthorizedException,
+} from '@nestjs/common';
+import { ConfigService } from '@nestjs/config';
 import { JwtService } from '@nestjs/jwt';
 import type { AuthTokens, LoginBody, RefreshTokenBody, RegisterBody } from '@roamind/shared';
 import { argon2id, hash, verify } from 'argon2';
 import { eq } from 'drizzle-orm';
+import type { Env } from '../config/env.js';
 import { DatabaseService } from '../database/database.service.js';
 import { refreshTokens } from '../database/schema/index.js';
 import { UsersService } from '../users/users.service.js';
@@ -11,6 +18,7 @@ import {
   EMAIL_ALREADY_REGISTERED_MESSAGE,
   INVALID_CREDENTIALS_MESSAGE,
   INVALID_REFRESH_TOKEN_MESSAGE,
+  SIGNUP_CLOSED_MESSAGE,
   REFRESH_TOKEN_BYTES,
   REFRESH_TOKEN_ENCODING,
   REFRESH_TOKEN_HASH_ALGORITHM,
@@ -24,9 +32,14 @@ export class AuthService {
     private readonly users: UsersService,
     private readonly database: DatabaseService,
     private readonly jwt: JwtService,
+    private readonly config: ConfigService<Env, true>,
   ) {}
 
   async register(input: RegisterBody): Promise<AuthTokens> {
+    if (!this.config.get('ALLOW_SIGNUP', { infer: true })) {
+      throw new ForbiddenException(SIGNUP_CLOSED_MESSAGE);
+    }
+
     const email = input.email.toLowerCase();
     const existing = await this.users.findByEmail(email);
     if (existing) {
