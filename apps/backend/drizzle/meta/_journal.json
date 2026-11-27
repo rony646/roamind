@@ -8,6 +8,13 @@
       "when": 1795641554876,
       "tag": "0000_lyrical_black_widow",
       "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "7",
+      "when": 1795810784252,
+      "tag": "0001_new_tusk",
+      "breakpoints": true
     }
   ]
 }
